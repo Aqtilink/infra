@@ -1,0 +1,53 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: aqtilink-ingress
+  namespace: aqtilink
+  annotations:
+    kubernetes.io/ingress.class: gce
+    kubernetes.io/ingress.global-static-ip-name: aqtilink-ip
+    networking.gke.io/managed-certificates: aqtilink-cert
+spec:
+  ingressClassName: gce
+  rules:
+    - host: aqtilink.live
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+          - path: /api/v1/activities
+            pathType: Prefix
+            backend:
+              service:
+                name: activity-service
+                port:
+                  number: 8081
+          - path: /api/v1/users
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8080
+          - path: /api/v1/friend-requests
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8080
+
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: aqtilink-cert
+  namespace: aqtilink
+spec:
+  domains:
+    - aqtilink.live
