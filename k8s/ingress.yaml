@@ -27,7 +27,21 @@ spec:
                 name: activity-service
                 port:
                   number: 8081
+          - path: /activity-docs
+            pathType: Prefix
+            backend:
+              service:
+                name: activity-service
+                port:
+                  number: 8081
           - path: /api/v1/users
+            pathType: Prefix
+            backend:
+              service:
+                name: user-service
+                port:
+                  number: 8080
+          - path: /user-docs
             pathType: Prefix
             backend:
               service:
